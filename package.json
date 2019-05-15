@@ -1,0 +1,22 @@
+{
+  "name": "wikiclon",
+  "version": "1.0.0",
+  "description": "Wikipedia Clone",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grondo89/Wikiclon.git"
+  },
+  "keywords": [
+    "Wikiclon"
+  ],
+  "author": "Gabriel Grondona",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grondo89/Wikiclon/issues"
+  },
+  "homepage": "https://github.com/grondo89/Wikiclon#readme"
+}
