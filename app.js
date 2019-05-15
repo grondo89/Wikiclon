@@ -1,23 +1,34 @@
-
-var fs = require('fs')
-
 const express = require( 'express' );
-const app = express()
-app.use(express.static('public'))
-
+const app = express();
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
-
 const routes = require('./routes');
-app.use('/', routes);
-
 const morgan = require('morgan')
-app.use(morgan('combined', { stream: accessLogStream }))
-
 const nunjucks = require( 'nunjucks' )
-app.set('view engine', 'html'); // hace que res.render funcione con archivos html
-app.engine('html', nunjucks.render); // cuando le den archivos html a res.render, va a usar nunjucks
-nunjucks.configure('views')
+var lodash = require('lodash')
+var fs = require('fs')
+var models = require('./models');
 
-var server = app.listen(3000);
-console.log('Estas escuhando en el puerto 3000')
+
+app.use(express.static('public'))
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/', routes);
+//app.use(morgan('combined', { stream: accessLogStream }))
+nunjucks.configure('views')
+app.engine('html', nunjucks.render); // cuando le den archivos html a res.render, va a usar nunjucks
+app.set('view engine', 'html'); // hace que res.render funcione con archivos html
+
+
+// var models = require('./models');
+// ... otras cosas
+models.User.sync({})
+.then(function () {
+    return models.Page.sync({force: true})
+})
+.then(function () {
+    // asegurate de reemplazar el nombre de abajo con tu app de express
+    app.listen(3000, function () {
+        console.log('Server is listening on port 3000!');
+    });
+})
+.catch(console.error);
+
