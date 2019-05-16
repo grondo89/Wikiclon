@@ -35,6 +35,8 @@ var User = db.define('user', {
     }
 });
 
+Page.belongsTo(User, { as: 'author' });
+
 function generateUrlTitle (title) {
     if (title) {
       // Remueve todos los caracteres no-alfanuméricos 

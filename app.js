@@ -22,7 +22,7 @@ app.set('view engine', 'html'); // hace que res.render funcione con archivos htm
 // ... otras cosas
 models.User.sync({})
 .then(function () {
-    return models.Page.sync({force: true})
+    return models.Page.sync({force: false})
 })
 .then(function () {
     // asegurate de reemplazar el nombre de abajo con tu app de express

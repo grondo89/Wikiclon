@@ -9,11 +9,6 @@ router.get('/', function(req, res, next) {
     res.redirect('/');
   });
 
-// router.post('/', function(req,res){
-//     console.log(req.body)
-//     res.json(req.body)
-//     })
-
 router.get('/add', function(req,res){
     res.render( 'addpage')
     ;
@@ -34,19 +29,40 @@ router.get('/add', function(req,res){
 // res.render( 'index', { tweets: tweets, showForm: true } );  
  
 router.post('/', function(req, res, next) {
-  // agregá definiciones para  `title` y `content`
-  var page = Page.build({
-    title: req.body.title,
-    content: req.body.content
-  });
+  User.findOrCreate({
+    where: {
+      name: req.body.authorName,
+    },
+    defaults: { 
+      name: req.body.authorName,
+      email: req.body.authorEmail
+    }
+  })
+  .then(function (values) {
+    var user = values[0];
+    var page = Page.build({
+      title: req.body.title,
+      content: req.body.content
+    });
+    return page.save().then(function (page) {
+      return page.setAuthor(user);
+    });
+  })
+  .then(function (page) {
+    res.redirect(page.route);
+  })
+  .catch(next);
+
   // Asegurate que solo redirigimos **luego** que nuestro save esta completo!
   // nota:  `.save` devuelve una promesa o puede tomar un callback.
-  console.log(req.body)
-  page.save()
-  .then(savedPage => {
-    console.log(savedPage)  
-    res.status(200)})
-    res.redirect('/')
-  });
+  
+  // page.save()
+  //   .then(savedPage => {
+  //     console.log(savedPage)
+  //     res.redirect(savedPage.route); // route virtual FTW
+  // })
+  // .catch(next);
+  // 
+});
 
 module.exports = router
